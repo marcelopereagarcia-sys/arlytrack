@@ -1,25 +1,50 @@
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { DarkTheme, DefaultTheme, ThemeProvider } from '@react-navigation/native';
+/**
+ * Configuración raíz de la aplicación MotoTrack (app/_layout.tsx).
+ * Importa el servicio de rastreo para garantizar el registro del TaskManager en segundo plano,
+ * configura el tema oscuro nativo y la barra de estado.
+ */
+
+import React, { useEffect } from 'react';
+import { LogBox } from 'react-native';
+import { StatusBar } from 'expo-status-bar';
+import { DarkTheme, ThemeProvider } from 'expo-router/react-navigation';
 import { useFonts } from 'expo-font';
 import { Stack } from 'expo-router';
 import * as SplashScreen from 'expo-splash-screen';
-import { useEffect } from 'react';
+import FontAwesome from '@expo/vector-icons/FontAwesome';
 import 'react-native-reanimated';
 
-import { useColorScheme } from '@/components/useColorScheme';
+// Silenciar advertencia informativa de Expo Go sobre background location en Android
+LogBox.ignoreLogs(['Background location is limited in Expo Go']);
+
+// Importar servicio de rastreo para registrar la tarea en segundo plano al arrancar la app
+import '@/services/tracker';
+import { MotoColors } from '@/constants/Colors';
 
 export {
-  // Catch any errors thrown by the Layout component.
+  // Captura de errores del árbol de navegación
   ErrorBoundary,
 } from 'expo-router';
 
 export const unstable_settings = {
-  // Ensure that reloading on `/modal` keeps a back button present.
   initialRouteName: '(tabs)',
 };
 
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Evitar que la pantalla de splash se oculte antes de cargar los recursos
 SplashScreen.preventAutoHideAsync();
+
+const MotoNavigationTheme = {
+  ...DarkTheme,
+  colors: {
+    ...DarkTheme.colors,
+    primary: MotoColors.primary,
+    background: MotoColors.background,
+    card: MotoColors.surface,
+    text: MotoColors.text,
+    border: MotoColors.border,
+    notification: MotoColors.primary,
+  },
+};
 
 export default function RootLayout() {
   const [loaded, error] = useFonts({
@@ -27,7 +52,6 @@ export default function RootLayout() {
     ...FontAwesome.font,
   });
 
-  // Expo Router uses Error Boundaries to catch errors in the navigation tree.
   useEffect(() => {
     if (error) throw error;
   }, [error]);
@@ -46,13 +70,20 @@ export default function RootLayout() {
 }
 
 function RootLayoutNav() {
-  const colorScheme = useColorScheme();
-
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
+    <ThemeProvider value={MotoNavigationTheme}>
+      <StatusBar style="light" />
       <Stack>
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="modal" options={{ presentation: 'modal' }} />
+        <Stack.Screen
+          name="modal"
+          options={{
+            presentation: 'modal',
+            title: 'Información',
+            headerStyle: { backgroundColor: MotoColors.background },
+            headerTintColor: MotoColors.text,
+          }}
+        />
       </Stack>
     </ThemeProvider>
   );

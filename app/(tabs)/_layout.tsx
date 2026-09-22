@@ -1,57 +1,66 @@
+/**
+ * Navegación por pestañas de MotoTrack (app/(tabs)/_layout.tsx).
+ * Incluye pestañas "Ruta en Vivo" e "Historial" con iconos de Lucide y tema oscuro predeterminado.
+ */
+
 import React from 'react';
-import FontAwesome from '@expo/vector-icons/FontAwesome';
-import { Link, Tabs } from 'expo-router';
-import { Pressable } from 'react-native';
-
-import Colors from '@/constants/Colors';
-import { useColorScheme } from '@/components/useColorScheme';
-import { useClientOnlyValue } from '@/components/useClientOnlyValue';
-
-// You can explore the built-in icon families and icons on the web at https://icons.expo.fyi/
-function TabBarIcon(props: {
-  name: React.ComponentProps<typeof FontAwesome>['name'];
-  color: string;
-}) {
-  return <FontAwesome size={28} style={{ marginBottom: -3 }} {...props} />;
-}
+import { Tabs } from 'expo-router';
+import { History, Navigation } from 'lucide-react-native';
+import { MotoColors } from '@/constants/Colors';
 
 export default function TabLayout() {
-  const colorScheme = useColorScheme();
-
   return (
     <Tabs
       screenOptions={{
-        tabBarActiveTintColor: Colors[colorScheme ?? 'light'].tint,
-        // Disable the static render of the header on web
-        // to prevent a hydration error in React Navigation v6.
-        headerShown: useClientOnlyValue(false, true),
+        tabBarActiveTintColor: MotoColors.primary,
+        tabBarInactiveTintColor: MotoColors.textMuted,
+        tabBarStyle: {
+          backgroundColor: MotoColors.background,
+          borderTopColor: MotoColors.border,
+          borderTopWidth: 1.5,
+          height: 64,
+          paddingBottom: 8,
+          paddingTop: 8,
+        },
+        tabBarLabelStyle: {
+          fontSize: 12,
+          fontWeight: '700',
+        },
+        headerStyle: {
+          backgroundColor: MotoColors.background,
+          borderBottomColor: MotoColors.border,
+          borderBottomWidth: 1,
+          shadowOpacity: 0,
+          elevation: 0,
+        },
+        headerTintColor: MotoColors.text,
+        headerTitleStyle: {
+          fontWeight: '900',
+          fontSize: 20,
+        },
       }}>
+      {/* Pestaña Principal: Grabación en Vivo con HUD */}
       <Tabs.Screen
         name="index"
         options={{
-          title: 'Tab One',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
-          headerRight: () => (
-            <Link href="/modal" asChild>
-              <Pressable>
-                {({ pressed }) => (
-                  <FontAwesome
-                    name="info-circle"
-                    size={25}
-                    color={Colors[colorScheme ?? 'light'].text}
-                    style={{ marginRight: 15, opacity: pressed ? 0.5 : 1 }}
-                  />
-                )}
-              </Pressable>
-            </Link>
+          title: 'En Vivo',
+          headerShown: false,
+          tabBarIcon: ({ color, size }) => (
+            <Navigation size={size || 24} color={color} />
           ),
         }}
       />
+
+      {/* Pestaña: Historial de Rutas Anteriores */}
       <Tabs.Screen
-        name="two"
+        name="history"
         options={{
-          title: 'Tab Two',
-          tabBarIcon: ({ color }) => <TabBarIcon name="code" color={color} />,
+          title: 'Historial',
+          headerTitle: 'Historial de Rutas',
+          headerShown: true,
+          tabBarIcon: ({ color, size }) => (
+            <History size={size || 24} color={color} />
+          ),
         }}
       />
     </Tabs>
