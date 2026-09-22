@@ -20,9 +20,11 @@ ios/
 *.apk
 *.aab
 
-# IDEs
+# IDEs & AI tools
 .idea/
 .vscode/
+.claude/
+CLAUDE.md
 
 # Metro
 .metro-health-check*
