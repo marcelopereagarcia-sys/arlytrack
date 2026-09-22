@@ -21,7 +21,7 @@
 
 ## 🌟 ¿Qué es ArlyTrack?
 
-**ArlyTrack** nace con una premisa simple: la mayoría de aplicaciones de rutas para moto actuales requieren registro obligatorio, sincronizan tu ubicación con servidores remotos, te bombardean con publicidad o cobran suscripciones mensuales por funciones esenciales como exportar un archivo GPX.
+**ArlyTrack** nace con una premisa simple: Mi hijo (Arly) es un apasionado de las motos, el quería una aplicación para registrar sus trayectos pero la mayoría de aplicaciones de rutas para moto actuales requieren registro obligatorio, sincronizan tu ubicación con servidores remotos, te bombardean con publicidad o cobran suscripciones mensuales por funciones esenciales como exportar un archivo GPX.
 
 ArlyTrack es un **proyecto de código abierto (Open Source)** bajo licencia MIT, pensado para que cualquier motero pueda instalarlo libremente, usarlo sin conexión en puertos de montaña remotos y mejorarlo en comunidad.
 
@@ -200,5 +200,5 @@ Este proyecto está bajo la Licencia **MIT** — consulta el archivo [LICENSE](.
 ---
 
 <p align="center">
-  Hecho con pasión por las dos ruedas y el software libre. ¡Buenas rutas y ráfagas! ✌️🏍️
+  Hecho para los amantes de las dos ruedas! 🏍️
 </p>
