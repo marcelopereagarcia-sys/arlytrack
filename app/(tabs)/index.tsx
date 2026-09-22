@@ -23,7 +23,7 @@ import {
   useWindowDimensions,
   View,
 } from 'react-native';
-import { useFocusEffect } from 'expo-router';
+import { router, useFocusEffect } from 'expo-router';
 import * as Location from 'expo-location';
 import { activateKeepAwakeAsync, deactivateKeepAwake } from 'expo-keep-awake';
 import {
@@ -33,6 +33,7 @@ import {
   Crosshair,
   Edit3,
   Gauge,
+  History,
   Layers,
   Mountain,
   Pause,
@@ -349,42 +350,56 @@ export default function LiveRideScreen() {
 
       {/* 2. Panel HUD superior con saludo personalizado y métricas */}
       <View style={isLandscape ? styles.hudOverlayLandscape : styles.hudOverlay} pointerEvents="box-none">
-        {/* Barra superior interactiva de bienvenida y perfil de piloto */}
-        <Pressable
-          onPress={() => setIsProfileModalVisible(true)}
-          hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
-          style={({ pressed }) => [
-            styles.riderBar,
-            pressed && styles.riderBarPressed,
-          ]}>
-          <View style={styles.riderChipRow}>
-            <View style={styles.riderChip}>
-              {riderPhoto ? (
-                <Image source={{ uri: riderPhoto }} style={styles.riderAvatar} />
-              ) : (
-                <User size={16} color={MotoColors.primary} />
+        {/* Barra superior: Perfil de piloto y acceso directo al Historial */}
+        <View style={styles.topHeaderRow}>
+          <Pressable
+            onPress={() => setIsProfileModalVisible(true)}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={({ pressed }) => [
+              styles.riderBar,
+              pressed && styles.riderBarPressed,
+            ]}>
+            <View style={styles.riderChipRow}>
+              <View style={styles.riderChip}>
+                {riderPhoto ? (
+                  <Image source={{ uri: riderPhoto }} style={styles.riderAvatar} />
+                ) : (
+                  <User size={16} color={MotoColors.primary} />
+                )}
+                <Text style={styles.riderChipText}>PILOTO: {riderNickname.toUpperCase()}</Text>
+                <Edit3 size={13} color={MotoColors.primary} />
+              </View>
+
+              {activeVehicle && (
+                <View style={styles.vehicleBadge}>
+                  <Bike size={13} color={MotoColors.primary} />
+                  <Text style={styles.vehicleBadgeText} numberOfLines={1}>
+                    {activeVehicle.name}
+                  </Text>
+                </View>
               )}
-              <Text style={styles.riderChipText}>PILOTO: {riderNickname.toUpperCase()}</Text>
-              <Edit3 size={13} color={MotoColors.primary} />
             </View>
 
-            {activeVehicle && (
-              <View style={styles.vehicleBadge}>
-                <Bike size={13} color={MotoColors.primary} />
-                <Text style={styles.vehicleBadgeText} numberOfLines={1}>
-                  {activeVehicle.name}
-                </Text>
-              </View>
-            )}
-          </View>
+            <Text style={styles.riderGreeting} numberOfLines={1}>
+              {status === 'idle' && `¡Listo para rodar! 🏍️`}
+              {status === 'recording' && `En marcha 🔥`}
+              {status === 'paused' && `En descanso ☕`}
+              {status === 'finished' && `Ruta finalizada 🏁`}
+            </Text>
+          </Pressable>
 
-          <Text style={styles.riderGreeting} numberOfLines={1}>
-            {status === 'idle' && `¡Listo para rodar! 🏍️`}
-            {status === 'recording' && `En marcha 🔥`}
-            {status === 'paused' && `En descanso ☕`}
-            {status === 'finished' && `Ruta finalizada 🏁`}
-          </Text>
-        </Pressable>
+          {/* Botón destacado de Acceso Directo a Historial */}
+          <Pressable
+            onPress={() => router.push('/(tabs)/history')}
+            hitSlop={{ top: 10, bottom: 10, left: 10, right: 10 }}
+            style={({ pressed }) => [
+              styles.historyQuickButton,
+              pressed && styles.historyQuickButtonPressed,
+            ]}>
+            <History size={20} color={MotoColors.primary} />
+            <Text style={styles.historyQuickText}>Historial</Text>
+          </Pressable>
+        </View>
 
         {/* Banner destacado de Modo Descanso en pausa */}
         {status === 'paused' && (
@@ -662,7 +677,13 @@ const styles = StyleSheet.create({
     width: 350,
     gap: 6,
   },
+  topHeaderRow: {
+    flexDirection: 'row',
+    gap: 8,
+    alignItems: 'stretch',
+  },
   riderBar: {
+    flex: 1,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -679,6 +700,31 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 3 },
     shadowOpacity: 0.35,
     shadowRadius: 6,
+  },
+  historyQuickButton: {
+    backgroundColor: 'rgba(22, 27, 38, 0.96)',
+    borderColor: MotoColors.border,
+    borderWidth: 1.5,
+    borderRadius: 16,
+    paddingHorizontal: 12,
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 3,
+    elevation: 5,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 3 },
+    shadowOpacity: 0.35,
+    shadowRadius: 6,
+  },
+  historyQuickButtonPressed: {
+    backgroundColor: '#1C2433',
+    borderColor: MotoColors.primary,
+    transform: [{ scale: 0.96 }],
+  },
+  historyQuickText: {
+    color: MotoColors.primary,
+    fontSize: 10.5,
+    fontWeight: '800',
   },
   riderBarPressed: {
     backgroundColor: '#1C2433',

@@ -28,6 +28,11 @@
         "RECEIVE_BOOT_COMPLETED"
       ]
     },
+    "androidNavigationBar": {
+      "visible": "always",
+      "barStyle": "light-content",
+      "backgroundColor": "#0B0E14"
+    },
     "web": {
       "bundler": "metro",
       "output": "static",

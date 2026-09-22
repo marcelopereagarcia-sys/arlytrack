@@ -54,6 +54,9 @@ const LEAFLET_HTML = `
     .leaflet-control-attribution, .leaflet-control-zoom {
       display: none !important;
     }
+    .dark-tiles img, .dark-tiles {
+      filter: invert(100%) hue-rotate(180deg) brightness(95%) contrast(90%);
+    }
     .moto-marker {
       display: flex;
       align-items: center;
@@ -179,9 +182,9 @@ const LEAFLET_HTML = `
         maxZoom: 18,
         crossOrigin: true
       }),
-      dark: createCachedTileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/dark_all/{z}/{x}/{y}{r}.png', {
+      dark: createCachedTileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
         maxZoom: 19,
-        subdomains: 'abcd',
+        className: 'dark-tiles',
         crossOrigin: true
       })
     };

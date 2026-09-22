@@ -60,15 +60,11 @@ function getTileUrl(x: number, y: number, z: number, mode: RouteMapMode): string
     return `https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/${z}/${wrappedY}/${wrappedX}.jpg`;
   }
   if (mode === 'dark') {
-    // CartoDB Dark Matter
-    const subdomains = ['a', 'b', 'c', 'd'];
-    const s = subdomains[Math.abs(wrappedX + wrappedY) % subdomains.length];
-    return `https://${s}.basemaps.cartocdn.com/rastertiles/dark_all/${z}/${wrappedX}/${wrappedY}.png`;
+    // OpenStreetMap estándar
+    return `https://tile.openstreetmap.org/${z}/${wrappedX}/${wrappedY}.png`;
   }
-  // Modo estándar limpio: CartoDB Voyager / OpenStreetMap (calles, curvas y carreteras claras sin capas oscuras)
-  const subdomains = ['a', 'b', 'c', 'd'];
-  const s = subdomains[Math.abs(wrappedX + wrappedY) % subdomains.length];
-  return `https://${s}.basemaps.cartocdn.com/rastertiles/voyager/${z}/${wrappedX}/${wrappedY}.png`;
+  // Modo estándar limpio: OpenStreetMap oficial sin marcas de agua
+  return `https://tile.openstreetmap.org/${z}/${wrappedX}/${wrappedY}.png`;
 }
 
 export function RouteVectorMap({

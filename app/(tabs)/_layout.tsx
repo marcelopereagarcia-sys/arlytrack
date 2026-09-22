@@ -4,11 +4,18 @@
  */
 
 import React from 'react';
+import { Platform } from 'react-native';
 import { Tabs } from 'expo-router';
 import { History, Navigation } from 'lucide-react-native';
 import { MotoColors } from '@/constants/Colors';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 export default function TabLayout() {
+  const insets = useSafeAreaInsets();
+  // Elevar la barra de pestañas para que nunca quede oculta por los botones del sistema Android (3 botones o gestos)
+  const bottomInset = Math.max(insets.bottom, Platform.OS === 'android' ? 16 : 8);
+  const barHeight = 58 + bottomInset;
+
   return (
     <Tabs
       screenOptions={{
@@ -18,9 +25,9 @@ export default function TabLayout() {
           backgroundColor: MotoColors.background,
           borderTopColor: MotoColors.border,
           borderTopWidth: 1.5,
-          height: 64,
-          paddingBottom: 8,
-          paddingTop: 8,
+          height: barHeight,
+          paddingBottom: bottomInset,
+          paddingTop: 6,
         },
         tabBarLabelStyle: {
           fontSize: 12,
