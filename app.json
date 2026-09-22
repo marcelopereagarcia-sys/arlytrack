@@ -24,7 +24,8 @@
       "package": "com.arlytrack.app",
       "permissions": [
         "POST_NOTIFICATIONS",
-        "WAKE_LOCK"
+        "WAKE_LOCK",
+        "RECEIVE_BOOT_COMPLETED"
       ]
     },
     "web": {
@@ -34,6 +35,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-task-manager",
       [
         "expo-location",
         {
